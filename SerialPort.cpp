@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2013,2015,2016,2018,2020,2021 by Jonathan Naylor G4KLX
+ *   Copyright (C) 2013,2015,2016,2018,2020,2021,2023 by Jonathan Naylor G4KLX
  *   Copyright (C) 2016 by Colin Durbridge G4EML
  *   Copyright (C) 2016,2017,2018,2019 by Andy Uribe CA6JAU
  *   Copyright (C) 2019 by Florian Wolters DF2ET
@@ -239,7 +239,7 @@ void CSerialPort::getVersion()
 
 uint8_t CSerialPort::setConfig(const uint8_t* data, uint8_t length)
 {
-  if (length < 23U)
+  if (length < 13U)
     return 4U;
 
   bool ysfLoDev  = (data[0U] & 0x08U) == 0x08U;
@@ -286,15 +286,24 @@ uint8_t CSerialPort::setConfig(const uint8_t* data, uint8_t length)
   uint8_t dmrDelay = data[7U];
 #endif
 
-  m_cwIdTXLevel = data[5U]>>2;
+  m_cwIdTXLevel = data[5U] >> 2;
 
   uint8_t dstarTXLevel  = data[9U];
   uint8_t dmrTXLevel    = data[10U];
   uint8_t ysfTXLevel    = data[11U];
   uint8_t p25TXLevel    = data[12U];
-  uint8_t nxdnTXLevel   = data[15U];
-  uint8_t pocsagTXLevel = data[17U];
-  uint8_t m17TXLevel    = data[21U];
+  uint8_t nxdnTXLevel   = 128U;
+  uint8_t pocsagTXLevel = 128U;
+  uint8_t m17TXLevel    = 128U;
+
+  if (length >= 16U)
+    nxdnTXLevel = data[15U];
+
+  if (length >= 18U)
+    pocsagTXLevel = data[17U];
+
+  if (length >= 22U)
+    m17TXLevel = data[21U];
 
   io.setDeviations(dstarTXLevel, dmrTXLevel, ysfTXLevel, p25TXLevel, nxdnTXLevel, m17TXLevel, pocsagTXLevel, ysfLoDev);
 
