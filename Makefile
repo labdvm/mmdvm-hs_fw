@@ -106,7 +106,7 @@ ifeq ($(OS),Windows_NT)
 	DFU_UTIL=./$(F1_LIB_PATH)/utils/win/dfu-util.exe
 	STM32FLASH=./$(F1_LIB_PATH)/utils/win/stm32flash.exe
 else
-	CLEANCMD=rm -f $(OBJ_F1BL) $(OBJ_F4) $(OBJ_F7) $(BINDIR)/*.hex $(BINDIR)/mmdvm_f1.bin $(BINDIR)/mmdvm_f1bl.bin $(BINDIR)/mmdvm_f1nobl.bin $(BINDIR)/*.elf $(BINDIR)/*.bin
+	CLEANCMD=rm -f $(OBJ_F1BL) $(OBJ_F4) $(OBJ_F7) $(BINDIR)/*.hex $(BINDIR)/mmdvm_f1.bin $(BINDIR)/mmdvm_f1bl.bin $(BINDIR)/mmdvm_f1nobl.bin $(BINDIR)/*.elf 
 	MDDIRS=mkdir $@
 
 	ifeq ($(shell uname -s),Linux)
