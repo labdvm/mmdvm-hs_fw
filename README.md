@@ -108,7 +108,7 @@ WPSD & pi-star commands in an SSH console:
 - `sudo pistar-nanohsflash nano_hs`: Nano hotSPOT board
 - `sudo pistar-nanodvflash pi`: NanoDV NPi board
 - `sudo pistar-nanodvflash usb`: NanoDV USB board
-- `sudo pistar-skybridgeflash skybrige`: BridgeCom SkyBridge GPIO Hotspot board
+- `sudo pistar-skybridgeflash skybridge`: BridgeCom SkyBridge GPIO Hotspot board
 
 ### Windows
 
