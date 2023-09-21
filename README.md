@@ -93,21 +93,22 @@ Please see [BUILD.md](BUILD.md) for more details, and also [MMDVM](https://group
 
 Please check the latest firmware [here](https://github.com/juribeparada/MMDVM_HS/releases).
 
-### Pi-Star binary firmware installation
+### WPSD & Pi-Star binary firmware installation
 
-You could use some pi-star commands under SSH console:
+WPSD & pi-star commands in an SSH console:
 
-- sudo pistar-zumspotflash rpi: ZUMspot RPi board
-- sudo pistar-zumspotflash rpi_duplex: ZUMSpot duplex board conected to GPIO
-- sudo pistar-zumspotflash usb: ZUMspot USB dongle
-- sudo pistar-zumspotflash libre: ZUMspot Libre Kit or generic MMDVM_HS board with USB
-- sudo pistar-mmdvmhshatflash hs_hat: MMDVM_HS_Hat board (14.7456MHz TCXO)
-- sudo pistar-mmdvmhshatflash hs_dual_hat: HS_DUAL_HAT board (14.7456MHz TCXO)
-- sudo pistar-mmdvmhshatflash hs_hat-12mhz: MMDVM_HS_Hat board (12.288MHz TCXO)
-- sudo pistar-mmdvmhshatflash hs_dual_hat-12mhz: HS_DUAL_HAT board (12.288MHz TCXO)
-- sudo pistar-nanohsflash nano_hs: Nano hotSPOT board
-- sudo pistar-nanodvflash pi: NanoDV NPi board
-- sudo pistar-nanodvflash usb: NanoDV USB board
+- `sudo pistar-zumspotflash rpi`: ZUMspot RPi board
+- `sudo pistar-zumspotflash rpi_duplex`: ZUMSpot duplex board conected to GPIO
+- `sudo pistar-zumspotflash usb`: ZUMspot USB dongle
+- `sudo pistar-zumspotflash libre`: ZUMspot Libre Kit or generic MMDVM_HS board with USB
+- `sudo pistar-mmdvmhshatflash hs_hat`: MMDVM_HS_Hat board (14.7456MHz TCXO)
+- `sudo pistar-mmdvmhshatflash hs_dual_hat`: HS_DUAL_HAT board (14.7456MHz TCXO)
+- `sudo pistar-mmdvmhshatflash hs_hat-12mhz`: MMDVM_HS_Hat board (12.288MHz TCXO)
+- `sudo pistar-mmdvmhshatflash hs_dual_hat-12mhz`: HS_DUAL_HAT board (12.288MHz TCXO)
+- `sudo pistar-nanohsflash nano_hs`: Nano hotSPOT board
+- `sudo pistar-nanodvflash pi`: NanoDV NPi board
+- `sudo pistar-nanodvflash usb`: NanoDV USB board
+- `sudo pistar-skybridgeflash skybrige`: BridgeCom SkyBridge GPIO Hotspot board
 
 ### Windows
 
