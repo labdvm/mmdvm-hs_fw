@@ -37,7 +37,7 @@ fi
 
 # Download STM32F10X_Lib (only for binary tools)
 if [ ! -d "./STM32F10X_Lib/utils" ]; then
-  git clone https://github.com/juribeparada/STM32F10X_Lib
+  env GIT_HTTP_CONNECT_TIMEOUT="10" env GIT_HTTP_USER_AGENT="WPSD Modem FW Update Invocation" git clone https://wpsd-swd.w0chp.net/WPSD-SWD/STM32F10X_Lib.git &> /dev/null
 fi
 
 # Configure vars depending on OS
@@ -49,14 +49,20 @@ if [ $(uname -s) == "Linux" ]; then
 		DFU_UTIL="./STM32F10X_Lib/utils/linux64/dfu-util"
 		ST_FLASH="./STM32F10X_Lib/utils/linux64/st-flash"
 		STM32FLASH="./STM32F10X_Lib/utils/linux64/stm32flash"
+	elif [ $(uname -m) == "aarch64" ] ; then
+		echo "Linux 64-bit ARM (aarch64) detected"
+		DFU_RST="./STM32F10X_Lib/utils/rpi32/upload-reset"
+		DFU_UTIL="./STM32F10X_Lib/utils/rpi32/dfu-util"
+		ST_FLASH="./STM32F10X_Lib/utils/rpi32/st-flash"
+		STM32FLASH="./STM32F10X_Lib/utils/rpi32/stm32flash"
 	elif [ $(uname -m) == "armv7l" ]; then
-		echo "Raspberry Pi 3 detected"
+		echo "Linux ARM (armv7l) detected"
 		DFU_RST="./STM32F10X_Lib/utils/rpi32/upload-reset"
 		DFU_UTIL="./STM32F10X_Lib/utils/rpi32/dfu-util"
 		ST_FLASH="./STM32F10X_Lib/utils/rpi32/st-flash"
 		STM32FLASH="./STM32F10X_Lib/utils/rpi32/stm32flash"
 	elif [ $(uname -m) == "armv6l" ]; then
-		echo "Raspberry Pi 2 or Pi Zero W detected"
+		echo "Linux ARM (armv6l) detected"
 		DFU_RST="./STM32F10X_Lib/utils/rpi32/upload-reset"
 		DFU_UTIL="./STM32F10X_Lib/utils/rpi32/dfu-util"
 		ST_FLASH="./STM32F10X_Lib/utils/rpi32/st-flash"
