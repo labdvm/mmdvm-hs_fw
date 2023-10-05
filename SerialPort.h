@@ -71,11 +71,11 @@ public:
   void writeDebug(const char* text, int16_t n1, int16_t n2);
 
 private:
-  uint8_t m_buffer[256U];
-  uint8_t m_ptr;
-  uint8_t m_len;
-  uint8_t m_serial_buffer[128U];
-  uint8_t m_serial_len;
+  uint8_t  m_buffer[256U];
+  uint8_t  m_ptr;
+  uint8_t  m_len;
+  int      m_lastSerialAvail;
+  uint16_t m_lastSerialAvailCount;
 
   bool    m_debug;
   bool    m_firstCal;

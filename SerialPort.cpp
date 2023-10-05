@@ -88,12 +88,16 @@ const uint8_t PROTOCOL_VERSION   = 1U;
 char UDID[] = "00000000000000000000000000000000";
 #endif
 
+// Parameters for batching serial data
+const int      MAX_SERIAL_DATA  = 250;
+const uint16_t MAX_SERIAL_COUNT = 100U;
+
 CSerialPort::CSerialPort() :
 m_buffer(),
 m_ptr(0U),
 m_len(0U),
-m_serial_buffer(),
-m_serial_len(0U),
+m_lastSerialAvail(0),
+m_lastSerialAvailCount(0U),
 m_debug(false),
 m_firstCal(false)
 {
@@ -479,9 +483,9 @@ uint8_t CSerialPort::setFreq(const uint8_t* data, uint8_t length)
     pocsag_freq_tx |= data[11U] << 8;
     pocsag_freq_tx |= data[12U] << 16;
     pocsag_freq_tx |= data[13U] << 24;
-  }
-  else
+  } else {
     pocsag_freq_tx = freq_tx;
+  }
 
   return io.setFreq(freq_rx, freq_tx, rf_power, pocsag_freq_tx);
 }
@@ -613,8 +617,7 @@ void CSerialPort::process()
         m_buffer[0U] = c;
         m_ptr = 1U;
         m_len = 0U;
-      }
-      else {
+      } else {
         m_ptr = 0U;
         m_len = 0U;
       }
@@ -736,7 +739,7 @@ void CSerialPort::process()
             break;
 
           case MMDVM_DMR_DATA1:
-          #if defined(DUPLEX)
+#if defined(DUPLEX)
             if (m_dmrEnable) {
               if (m_modemState == STATE_IDLE || m_modemState == STATE_DMR) {
                 if (m_duplex)
@@ -750,7 +753,7 @@ void CSerialPort::process()
               DEBUG2("Received invalid DMR data", err);
               sendNAK(err);
             }
-          #endif
+#endif
             break;
 
           case MMDVM_DMR_DATA2:
@@ -776,7 +779,7 @@ void CSerialPort::process()
             break;
 
           case MMDVM_DMR_START:
-          #if defined(DUPLEX)
+#if defined(DUPLEX)
             if (m_dmrEnable) {
               err = 4U;
               if (m_len == 4U) {
@@ -795,29 +798,29 @@ void CSerialPort::process()
               DEBUG2("Received invalid DMR start", err);
               sendNAK(err);
             }
-          #endif
+#endif
             break;
 
           case MMDVM_DMR_SHORTLC:
-          #if defined(DUPLEX)
+#if defined(DUPLEX)
             if (m_dmrEnable)
               err = dmrTX.writeShortLC(m_buffer + 3U, m_len - 3U);
             if (err != 0U) {
               DEBUG2("Received invalid DMR Short LC", err);
               sendNAK(err);
             }
-          #endif
+#endif
             break;
 
           case MMDVM_DMR_ABORT:
-          #if defined(DUPLEX)
+#if defined(DUPLEX)
             if (m_dmrEnable)
               err = dmrTX.writeAbort(m_buffer + 3U, m_len - 3U);
             if (err != 0U) {
               DEBUG2("Received invalid DMR Abort", err);
               sendNAK(err);
             }
-          #endif
+#endif
             break;
 
           case MMDVM_YSF_DATA:
@@ -964,32 +967,20 @@ void CSerialPort::process()
 
 #if defined(SERIAL_REPEATER) || defined(SERIAL_REPEATER_USART1)
   // Check for any incoming serial data from a device/screen on UART2
-  //  !!Notice!! on powerup the Nextion screen dumps FF FF FF 88 FF FF FF to the serial port.
-  while (availableInt(3U))
-  {
-    // read UART2
-    m_serial_buffer[m_serial_len++] = readInt(3U);
-
-    if (m_serial_len >=3 && (m_serial_buffer[m_serial_len - 3] == 0xFF) && (m_serial_buffer[m_serial_len - 2] == 0xFF) && (m_serial_buffer[m_serial_len - 1] == 0xFF))
-    {
-      if (m_serial_len > 3)
-        serial.writeSerialRpt(m_serial_buffer, m_serial_len);
-
-      //  if the last 3 bytes are FF's then the screen is done sending data so send the m_serial_buffer to serial.writeSerialRpt()
-      //
-      //  TODO - BG5HHP
-      //   modem serial data repeat should be generic instead of coupling with the nextion protocol.
-      //
-      m_serial_len = 0U;
-      continue;
+  int serialAvail = availableInt(3U);
+  if ((serialAvail > 0 && serialAvail == m_lastSerialAvail && m_lastSerialAvailCount >= MAX_SERIAL_COUNT) || (serialAvail >= MAX_SERIAL_DATA)) {
+    uint8_t buffer[MAX_SERIAL_DATA];
+    for (int i = 0; i < serialAvail && i < MAX_SERIAL_DATA; i++) {
+      buffer[i] = readInt(3U);
+      m_lastSerialAvail--;
     }
-
-    if (m_serial_len == sizeof(m_serial_buffer))
-    {
-      // buffer overflow
-      m_serial_len = 0U;
-      continue;
-    }
+    serial.writeSerialRpt(buffer, serialAvail - m_lastSerialAvail);
+    m_lastSerialAvailCount = 0U;
+  } else if (serialAvail > 0 && serialAvail == m_lastSerialAvail) {
+    m_lastSerialAvailCount++;
+  } else {
+    m_lastSerialAvail      = serialAvail;
+    m_lastSerialAvailCount = 0U;
   }
 #endif
 }
@@ -1009,7 +1000,6 @@ void CSerialPort::writeSerialRpt(const uint8_t* data, uint8_t length)
   writeInt(1U, data, length, true);
 }
 #endif
-
 
 void CSerialPort::writeDStarHeader(const uint8_t* header, uint8_t length)
 {
