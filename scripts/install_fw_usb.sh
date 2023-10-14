@@ -17,29 +17,21 @@
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 # Configure latest version
-FW_VERSION="v1.5.2"
+FW_VERSION="v1.6.1"
 
 # Change USB-serial port name ONLY in macOS
 MAC_DEV_USB_SER="/dev/cu.usbmodem14401"
-
-# Configure beta version
-FW_VERSION_BETA="v1.5.1b"
 
 # Firmware filename
 FW_FILENAME="zumspot_usb_fw.bin"
 	
 # Download latest firmware
-if [ $1 = "beta" ]; then
-	echo "Downloading beta firmware..."
-	curl -OL https://github.com/juribeparada/MMDVM_HS/releases/download/$FW_VERSION_BETA/$FW_FILENAME
-else
-	echo "Downloading latest firmware (stable)..."
-	curl -OL https://github.com/juribeparada/MMDVM_HS/releases/download/$FW_VERSION/$FW_FILENAME
-fi
+echo "Downloading firmware..."
+curl -s -A "CA6JAU/G4KLX/W0CHP Modem FW Update Script" -OL https://wpsd-swd.w0chp.net/WPSD-SWD/MMDVM_HS-Firmware_Latest-Compiled/raw/tag/$FW_VERSION/$FW_FILENAME
 
 # Download STM32F10X_Lib (only for binary tools)
 if [ ! -d "./STM32F10X_Lib/utils" ]; then
-  git clone https://github.com/juribeparada/STM32F10X_Lib
+  env GIT_HTTP_CONNECT_TIMEOUT="10" env GIT_HTTP_USER_AGENT="CA6JAU/G4KLX/W0CHP Modem FW Update Script" git clone https://wpsd-swd.w0chp.net/WPSD-SWD/STM32F10X_Lib.git &> /dev/null
 fi
 
 # Configure vars depending on OS
@@ -52,19 +44,19 @@ if [ $(uname -s) == "Linux" ]; then
 		ST_FLASH="./STM32F10X_Lib/utils/linux64/st-flash"
 		STM32FLASH="./STM32F10X_Lib/utils/linux64/stm32flash"
 	elif [ $(uname -m) == "aarch64" ] ; then
-		echo "Raspberry Pi 4 detected"
+		echo "Linux 64-bit ARM (aarch64) detected"
 		DFU_RST="./STM32F10X_Lib/utils/rpi32/upload-reset"
 		DFU_UTIL="./STM32F10X_Lib/utils/rpi32/dfu-util"
 		ST_FLASH="./STM32F10X_Lib/utils/rpi32/st-flash"
 		STM32FLASH="./STM32F10X_Lib/utils/rpi32/stm32flash"
 	elif [ $(uname -m) == "armv7l" ]; then
-		echo "Raspberry Pi 3 detected"
+		echo "Linux ARM (armv7l) detected"
 		DFU_RST="./STM32F10X_Lib/utils/rpi32/upload-reset"
 		DFU_UTIL="./STM32F10X_Lib/utils/rpi32/dfu-util"
 		ST_FLASH="./STM32F10X_Lib/utils/rpi32/st-flash"
 		STM32FLASH="./STM32F10X_Lib/utils/rpi32/stm32flash"
 	elif [ $(uname -m) == "armv6l" ]; then
-		echo "Raspberry Pi 2 or Pi Zero W detected"
+		echo "Linux ARM (armv6l) detected"
 		DFU_RST="./STM32F10X_Lib/utils/rpi32/upload-reset"
 		DFU_UTIL="./STM32F10X_Lib/utils/rpi32/dfu-util"
 		ST_FLASH="./STM32F10X_Lib/utils/rpi32/st-flash"
