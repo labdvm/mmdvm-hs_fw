@@ -46,6 +46,8 @@
 #define BOARD_INFO      "SkyBridge"
 #elif defined(LONESTAR_USB)
 #define BOARD_INFO      "LS_USB_STICK"
+#elif defined(MMDVM_HS_HAT_DVM_EuroNode)
+#define BOARD_INFO      "EuroNode"
 #else
 #define BOARD_INFO      "MMDVM_HS"
 #endif
@@ -71,13 +73,15 @@
 
 #define FW_VERSION      "v" VER_MAJOR "." VER_MINOR "." VER_REV " " VERSION_DATE
 
-#define DESCRIPTION     BOARD_INFO "-" FW_VERSION " " TCXO_FREQ "MHz " RF_DUAL RF_CHIP " FW by CA6JAU"
+#define DESCRIPTION     BOARD_INFO "-" FW_VERSION " " TCXO_FREQ "MHz " RF_DUAL RF_CHIP " FW by CA6JAU, G4KLX, W0CHP."
 
 #if defined(MADEBYMAKEFILE)
 #include "GitVersion.h"
 #endif
 
 #if defined(GITVERSION)
+#define GIT_HASH_SIZE 10
+#define TRUNCATED_GITVERSION (GITVERSION[0:GIT_HASH_SIZE])
 #define concat(a, b) a " GitID #" b ""
 const char HARDWARE[] = concat(DESCRIPTION, GITVERSION);
 #else
@@ -86,4 +90,3 @@ const char HARDWARE[] = concat(DESCRIPTION, __TIME__, __DATE__);
 #endif
 
 #endif
-
