@@ -23,7 +23,7 @@
 // 1) ZUMspot RPi or ZUMspot USB:
 // #define ZUMSPOT_ADF7021
 // 2) Libre Kit board or any homebrew hotspot with modified RF7021SE and Blue Pill STM32F103:
-#define LIBRE_KIT_ADF7021
+// #define LIBRE_KIT_ADF7021
 // 3) MMDVM_HS_Hat revisions 1.1, 1.2 and 1.4 (DB9MAT & DF2ET)
 // #define MMDVM_HS_HAT_REV12
 // 4) MMDVM_HS_Dual_Hat revisions 1.0 (DB9MAT & DF2ET & DO7EN)
@@ -36,10 +36,8 @@
 // #define D2RG_MMDVM_HS
 // 8) BridgeCom SkyBridge HotSpot
 // #define SKYBRIDGE_HS
-// 9) LoneStar USB Stick ADF7071
-// #define LONESTAR_USB
-// 10) DVMega EuroNode Hotspot/board
-// #define MMDVM_HS_HAT_DVM_EuroNode
+// 9) DVMEGA EuroNode NPI HotSpot
+#define MMDVM_HS_HAT_DVM_EuroNode
 
 // Enable ADF7021 support:
 #define ENABLE_ADF7021
@@ -64,8 +62,8 @@
 // #define AD7021_GAIN_HIGH
 
 // Host communication selection:
-// #define STM32_USART1_HOST
-#define STM32_USB_HOST
+#define STM32_USART1_HOST
+// #define STM32_USB_HOST
 // #define STM32_I2C_HOST
 
 // I2C host address:
@@ -75,7 +73,7 @@
 #define ENABLE_SCAN_MODE
 
 // Send RSSI value:
-// #define SEND_RSSI_DATA
+#define SEND_RSSI_DATA
 
 // Enable Nextion LCD serial port repeater on USART2 (ZUMspot Libre Kit and ZUMspot RPi):
 #define SERIAL_REPEATER
@@ -103,10 +101,10 @@
 // #define USE_ALTERNATE_M17_LEDS
 
 // Use the D-Star and DMR LEDs for POCSAG
-// #define USE_ALTERNATE_POCSAG_LEDS
+#define USE_ALTERNATE_POCSAG_LEDS
 
 // Enable for RPi 3B+, USB mode
-#define LONG_USB_RESET
+// #define LONG_USB_RESET
 
 // Enable modem debug messages
 #define ENABLE_DEBUG
@@ -118,6 +116,6 @@
 // #define DISABLE_FREQ_BAN
 
 // Enable UDID feature
-// #define ENABLE_UDID
+#define ENABLE_UDID
 
 #endif

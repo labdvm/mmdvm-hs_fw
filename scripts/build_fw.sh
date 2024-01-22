@@ -185,4 +185,14 @@ make -j4 bl
 mv ~/MMDVM_HS/bin/mmdvm_f1bl.bin ~/MMDVM_HS/bin/lonestar_usb_fw.bin
 make clean
 
+# Building DVMEGA EuroNode HS_HAT HS GPIO
+echo "********************************************************************"
+echo "********* Building DVMEGA EuroNode HS_HAT HS GPIO firmware *********"
+echo "********************************************************************"
+cp ~/MMDVM_HS/configs/DVMega_Euronode.h ~/MMDVM_HS/Config.h
+make -j4
+mv ~/MMDVM_HS/bin/mmdvm_f1.bin ~/MMDVM_HS/bin/euronode_pi_fw.bin
+make clean
+
+# put default config back:
 cp ~/MMDVM_HS/configs/ZUMspot_Libre.h ~/MMDVM_HS/Config.h
