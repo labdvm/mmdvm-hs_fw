@@ -9,9 +9,9 @@ This is a detailed guide for building the firmware of MMDVM_HS from the source c
 - [ZUMspot USB](#zumspot-usb)
 - [MMDVM_HS_Hat](#mmdvm_hs_hat)
 - [Makefile options](#makefile-options)
-- [Config.h options](#config.h-options)
+- [Config.h options](#configh-options)
 - [Pinout definitions](#pinout-definitions)
-- [Hidden options](#hidden-options)
+- [Hidden options](#hidden-functions)
  
 # ZUMspot RPi
 
